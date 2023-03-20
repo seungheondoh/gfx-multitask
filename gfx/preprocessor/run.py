@@ -3,10 +3,10 @@ import ast
 import pandas as pd
 import numpy as np
 import multiprocessing
-from constants import MUSIC_SAMPLE_RATE
-from audio_utils import load_audio, STR_CH_FIRST
-from io_utils import _json_dump
-    
+from gfx.preprocessor.constants import MUSIC_SAMPLE_RATE
+from gfx.preprocessor.audio_utils import load_audio, STR_CH_FIRST
+from gfx.preprocessor.io_utils import _json_dump
+
 def audio_resampler(_id, audio_path, save_path):
     src, _ = load_audio(
         path= os.path.join(audio_path, _id),
@@ -19,8 +19,8 @@ def audio_resampler(_id, audio_path, save_path):
     np.save(save_name, src.astype(np.float32))
     
 def main():
-    audio_path= "../dataset/august/mp3"
-    save_path= "../dataset/august/npy"
+    audio_path= "../../dataset/august/mp3"
+    save_path= "../../dataset/august/npy"
     total_track = os.listdir(audio_path)
     print(len(total_track))
     # audio resampling

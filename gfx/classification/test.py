@@ -130,9 +130,13 @@ def main_worker(args):
     
     logits = torch.cat(predictions, dim=0).numpy()
     targets = torch.cat(groudturths, dim=0).numpy()
+    roc_auc = metrics.roc_auc_score(targets, logits, average='macro')
+    pr_auc = metrics.average_precision_score(targets, logits, average='macro')
     best_f1, bset_macro_f1, best_decisions, thresholds = get_binary_decisions(targets, logits, best_f1=True)
     sample_f1, macro_f1, decisions, _ = get_binary_decisions(targets, logits, best_f1=False)
     results = {
+        'roc_auc' :roc_auc,
+        'pr_auc': pr_auc,
         "best_f1": best_f1,
         "bset_macro_f1": bset_macro_f1,
         "sample_f1": sample_f1,
