@@ -19,13 +19,8 @@ import torch.utils.data.distributed
 from sklearn import metrics
 from tqdm import tqdm
 from gfx.preprocessor.audio_utils import load_audio, STR_CH_FIRST
-
-
-from gfx.classification.dataset import AUGUST_Dataset
 from gfx.modules.audio_rep import TFRep
-from gfx.modules.tokenizer import ResFrontEnd, SpecPatchEmbed
 from gfx.classification.model import ResNet
-from gfx.utils.eval_utils import get_binary_decisions, save_cm
 
 parser = argparse.ArgumentParser(description='PyTorch MSD Training')
 parser.add_argument('--arch', default='resnet50')

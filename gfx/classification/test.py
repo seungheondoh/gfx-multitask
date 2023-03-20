@@ -52,7 +52,7 @@ parser.add_argument('--print_freq', default=50, type=int)
 
 parser.add_argument("--duration", default=3, type=int)
 parser.add_argument("--sr", default=22050, type=int)
-parser.add_argument("--num_chunks", default=8, type=int)
+parser.add_argument("--num_chunks", default=16, type=int)
 parser.add_argument("--mel_dim", default=128, type=int)
 parser.add_argument("--n_fft", default=1024, type=int)
 parser.add_argument("--win_length", default=1024, type=int)
