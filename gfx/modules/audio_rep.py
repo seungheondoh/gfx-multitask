@@ -5,12 +5,12 @@ import torch.nn as nn
 
 class TFRep(nn.Module):
     def __init__(self, 
-                sample_rate= 16000,
+                sample_rate= 22050,
                 f_min=0,
-                f_max=8000,
+                f_max=11050,
                 n_fft = 1024,
                 win_length = 1024,
-                hop_length = int(0.01 * 16000),
+                hop_length = 512,
                 n_mels = 128,
                 power = None,
                 pad= 0,
@@ -40,15 +40,4 @@ class TFRep(nn.Module):
         power_spec = spec.real.abs().pow(2)
         mel_spec = self.mel_scale(power_spec)
         mel_spec = self.amplitude_to_db(mel_spec)
-        return mel_spec # B x F x T
-
-    def spec(self, wav):
-        spec = self.spec_fn(wav)
-        real = spec.real
-        imag = spec.imag
-        power_spec = real.abs().pow(2)
-        eps = 1e-10
-        mag = torch.clamp(mag ** 2 + phase ** 2, eps, np.inf) ** 0.5
-        cos = real / mag
-        sin = imag / mag
-        return power_spec, imag, mag, cos, sin
+        return mel_spec
