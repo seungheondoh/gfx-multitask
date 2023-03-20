@@ -7,6 +7,7 @@ setup(
         'librosa >= 0.8',
         'torchaudio_augmentations==0.2.1', # for augmentation
         'gradio==3.22.1',
+        'gdown==4.6.4',
         'numpy',
         'pandas',
         'einops',

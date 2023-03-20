@@ -121,15 +121,14 @@ def main_worker(args):
         if args.gpu is not None:
             x = x.cuda(args.gpu, non_blocking=True)
             y = y.cuda(args.gpu, non_blocking=True)
-        B, C, T= x.shape
         with torch.no_grad():
-            predict = model(x.view(-1, T)) # flatten batch
-        avg_predict = predict.view(B, C, -1).mean(dim=1)
-        predictions.append(avg_predict.detach().cpu())
-        groudturths.append(y.detach().cpu())
-    
-    logits = torch.cat(predictions, dim=0).numpy()
-    targets = torch.cat(groudturths, dim=0).numpy()
+            pred_probs = model(x.squeeze(0))
+        pred_probs = pred_probs.mean(0,False)
+        predictions.append(pred_probs.detach().cpu())
+        groudturths.append(y.squeeze(0).detach().cpu())
+
+    logits = torch.stack(predictions).numpy()
+    targets = torch.stack(groudturths).numpy()
     roc_auc = metrics.roc_auc_score(targets, logits, average='macro')
     pr_auc = metrics.average_precision_score(targets, logits, average='macro')
     best_f1, bset_macro_f1, best_decisions, thresholds = get_binary_decisions(targets, logits, best_f1=True)
@@ -142,6 +141,7 @@ def main_worker(args):
         "sample_f1": sample_f1,
         "macro_f1": macro_f1
     }
+    print(results)
     with open(os.path.join(save_dir, f"results.json"), mode="w") as io:
         json.dump(results, io, indent=4)
     save_cm(best_decisions, targets, list(test_dataset.fl.columns), os.path.join(save_dir, "best_cm.png"))
